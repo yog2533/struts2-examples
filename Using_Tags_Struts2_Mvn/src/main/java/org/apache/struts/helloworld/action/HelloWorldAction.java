@@ -22,8 +22,19 @@ public class HelloWorldAction extends ActionSupport {
 	 */
 	private MessageStore messageStore;
 	
+	private static int helloCount = 0;
+	
+	public int getHelloCount() {
+		return helloCount;
+	}
+
+	public void setHelloCount(int helloCount) {
+		HelloWorldAction.helloCount = helloCount;
+	}
+
 	/*
-	 * Creates the MessageStore model object and 
+	 * Creates the MessageStore model object, 
+	 * increase helloCount by 1 and 
 	 * returns success.  The MessageStore model
 	 * object will be available to the view.
 	 * (non-Javadoc)
@@ -32,6 +43,9 @@ public class HelloWorldAction extends ActionSupport {
 	public String execute() throws Exception {
 		
 		messageStore = new MessageStore() ;
+		
+		helloCount++;
+		
 		return SUCCESS;
 	}
 
