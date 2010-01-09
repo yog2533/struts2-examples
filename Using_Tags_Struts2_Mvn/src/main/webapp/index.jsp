@@ -19,7 +19,7 @@
 
 <s:form action="hello">
 
-	<s:textfield name="userName" label="Your name:" />
+	<s:textfield name="userName" label="Your name" />
 	
 	<s:submit value="Submit" />
 
