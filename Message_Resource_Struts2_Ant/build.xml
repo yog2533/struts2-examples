@@ -14,7 +14,7 @@
 <project name="Message_Resource_Struts2_Ant" default="archive" basedir=".">
 	
     <description>
-           Example of validating a form submission using Struts 2
+           Example of using message resources
     </description>
 	
 	<property file="build.properties"/>
