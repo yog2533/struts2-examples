@@ -48,6 +48,13 @@
         <action name="causenullpointerexception" class="org.apache.struts.register.action.Register" method="throwNullPointerException">
         	<result>/register.jsp</result>
         </action>
+        
+        <action name="actionspecificexception" class="org.apache.struts.action.Register" method="throwSecurityException">
+        	<exception-mapping exception="org.apache.struts.register.exceptions.SecurityBreachException" 
+        	   result="login" />
+        	<result>/register.jsp</result>
+        	<result name="login">/login.jsp</result>
+        </action>
 
         <!-- If no class attribute is specified the framework will assume success and 
         render the result index.jsp -->
