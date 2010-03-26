@@ -31,7 +31,7 @@
   		
 
 	    <global-exception-mappings>
-	        <exception-mapping exception="edu.ku.it.si.struts2_jsp_example.exceptions.SecurityBreachException" result="securityerror" />
+	        <exception-mapping exception="org.apache.struts.register.exceptions.exceptions.SecurityBreachException" result="securityerror" />
 	        <exception-mapping exception="java.lang.Exception" result="error" />
 	   	</global-exception-mappings>
 	  
