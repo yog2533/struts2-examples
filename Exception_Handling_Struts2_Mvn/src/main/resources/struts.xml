@@ -49,7 +49,7 @@
         	<result>/register.jsp</result>
         </action>
         
-        <action name="actionspecificexception" class="org.apache.struts.action.Register" method="throwSecurityException">
+        <action name="actionspecificexception" class="org.apache.struts.register.action.Register" method="throwSecurityException">
         	<exception-mapping exception="org.apache.struts.register.exceptions.SecurityBreachException" 
         	   result="login" />
         	<result>/register.jsp</result>
