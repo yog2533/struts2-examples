@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="LoveKUSurvey_Ant_Build"
+  id="myeclipse.1262626425481"
+  context-root="/LoveKUSurvey_Ant_Build"
+  j2ee-spec="5.0"
+  archive="LoveKUSurvey_Ant_Build.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+

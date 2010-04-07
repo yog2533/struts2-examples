@@ -1,0 +1,142 @@
+<project name="LoveKUSurvey" default="war" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+<property name="war.name" value="LoveKUSurvey" />
+<property name="tomcat.home" value="/apps/tomcat" />
+<property name="test.data" value="reports/test/data" />
+	
+<target name="clean">
+	
+	<delete dir="target/classes" />
+	<delete dir="target/classes-test" />
+	<delete dir="target/${war.name}" />
+	<delete file="target/${war.name}.war" />
+	<delete dir="${test.data}" />
+	
+</target>
+
+
+<!--This target will use Maven to bring in all the dependent Jar files so they are
+available on the class path when the application is compiled and built into a war.
+NOTE: Your project must have a pom.xml file in the project root folder with the
+dependencies properly defined.  See:
+http://www.sonatype.com/books/maven-book/reference/pom-relationships-sect-project-dependencies.html  
+This target creates different classpathref depending on if you need to compile,
+test, or deploy for runtime
+To run this target the maven-ant-tasks jar must be in Ant's lib folder.
+See: http://maven.apache.org/ant-tasks/download.html-->
+<target name="mvn-init" unless="compile.classpath" >
+	
+	   <!--can specify a specifiy Maven local repository, if the local Maven repository
+	   is not in the standard location-->
+	    <condition property="maven.repo.local" value="${maven.repo.local}" else="${user.home}/.m2/repository">
+	        <isset property="maven.repo.local"/>
+	    </condition>
+	
+	    <echo>maven.repo.local=${maven.repo.local}</echo>
+	
+	    <artifact:localRepository id="local.repository" path="${maven.repo.local}"/>
+	    <artifact:pom file="pom.xml" id="maven.project"/>
+	    <artifact:dependencies pathId="compile.classpath" filesetId="compile.fileset" useScope="compile">
+	        <pom refid="maven.project"/>
+	        <localRepository refid="local.repository"/>
+	    </artifact:dependencies>
+	    <artifact:dependencies pathId="test.classpath" filesetId="test.fileset" useScope="test">
+	        <pom refid="maven.project"/>
+	        <localRepository refid="local.repository"/>
+	            </artifact:dependencies>
+	    <artifact:dependencies pathId="runtime.classpath" filesetId="runtime.fileset" useScope="runtime">
+	        <pom refid="maven.project"/>
+	        <localRepository refid="local.repository"/>
+	    </artifact:dependencies>
+	<path id="testing.classpath">
+		<path refid="compile.classpath" />
+		<path refid="test.classpath" />
+		<pathelement location="target/classes" />
+	</path>
+</target>
+	
+
+	
+
+<!--Note the classpathref attribute value for the javac task.  It references a 
+classpath established by the mvn init target.
+Note the srcdir and dir attribute values match up with the standard Maven directory strutcture.
+If you're not using the Maven dir structure you'll need to change those values-->	
+<target name="compile" depends="clean,mvn-init">
+    <mkdir dir="target/classes"/>
+    <javac srcdir="src/main/java" destdir="target/classes" classpathref="compile.classpath" source="1.5" target="1.5" />
+    <copy todir="target/classes">
+        <fileset dir="src/main/java" excludes="**/*.java"/>
+    </copy>
+    <copy todir="target/classes" failonerror="false">
+        <fileset dir="src/main/resources"/>
+    </copy>
+	<mkdir dir="target/classes-test"/>
+	<javac srcdir="src/test/java" destdir="target/classes-test" classpathref="testing.classpath" source="1.5" target="1.5" />
+    <copy todir="target/classes-test">
+        <fileset dir="src/test/java" excludes="**/*.java"/>
+    </copy>
+    <copy todir="target/classes-test" failonerror="false">
+        <fileset dir="src/test/resources"/>
+    </copy>
+</target>
+	
+<!--runs the JUnit tests in src/test/java.  Note that Test classes
+must start with "Test" -->
+<target name="test" depends="compile">
+	<mkdir dir="${test.data}" />
+	<junit printsummary="yes" fork="true" haltonfailure="no">
+		<classpath>
+			<path refid="compile.classpath" />
+			<path refid="testing.classpath" />
+			<pathelement location="target/classes" />
+			<pathelement location="target/classes-test" />
+		</classpath>
+		<formatter type="xml" />
+		<batchtest haltonfailure="no"
+		todir="${test.data}">
+		<fileset dir="src/test/java"
+		includes="**/Test*.java" />
+		</batchtest>
+	</junit>
+</target>
+
+<!--note the fileset attribute for the copy task to WEB-INF/lib.  It
+references a set of files established by the mvn init target.
+Note the dir values use the standard Maven directory struture.-->	
+<macrodef name="war-exploded" description="Created a new Ant task that can be referenced in other Ant targets">
+    <attribute name="deployDir" default="target/${war.name}"/>
+    <sequential>
+        <copy todir="@{deployDir}">
+            <fileset dir="src/main/webapp"/>
+        </copy>
+        <copy todir="@{deployDir}/WEB-INF/classes">
+            <fileset dir="target/classes"/>
+        </copy>
+        <copy todir="@{deployDir}/WEB-INF/lib" flatten="true">
+            <fileset refid="runtime.fileset"/>
+        </copy>
+    </sequential>
+</macrodef>          
+
+<target name="war-exploded" depends="compile">
+    <war-exploded/>
+</target>
+
+<target name="war" depends="war-exploded">
+    <zip destfile="target/${war.name}.war" basedir="target/${war.name}"/>
+</target>
+
+<target name="tomcat-war-exploded" depends="war-exploded">
+    <war-exploded deployDir="${tomcat.home}/webapps/${war.name}"/>
+</target>
+
+<target name="tomcat-war" depends="war">
+	<delete file="${tomcat.home}/webapps/${war.name}.war" />
+	<delete dir="${tomcat.home}/webapps/${war.name}" />
+	<copy todir="${tomcat.home}/webapps" file="target/${war.name}.war" />
+</target>
+
+
+ 
+</project>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+              http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+              http://www.springframework.org/schema/context
+              http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+              
+    <bean id="surveyDao" class="edu.ku.it.si.lovekusurvey.dao.SurveyDaoNoDB">
+    	<property name="totalNotSureAnswers" value="12" />
+    	<property name="totalNoAnswers" value="23" />
+    	<property name="totalYesAnswers" value="71" />
+    </bean>     
+    
+    <bean id="surveyService" class="edu.ku.it.si.lovekusurvey.service.SurveyServiceImpl">
+    	<property name="surveyDao" ref="surveyDao" />
+    </bean>     
+  
+
+
+</beans>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+ 
+   <!-- 
+    Loads DB repository configuration details from db.properties.
+    see: http://static.springframework.org/spring/docs/2.5.x/reference/beans.html#beans-factory-placeholderconfigurer
+   -->
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="location" value="classpath:/db_test.properties" />
+  </bean>
+ 
+   <!-- configure a JDBC data source
+       see Spring In Action 2nd Edition, pages 168 - 169  
+       inject the data source's properties from values stored in the db.properties file
+       which is read in above.
+       To use a data source and connection pooling see:
+       http://book.javanb.com/Professional-Java-Development-with-the-Spring-Framework/BBL0049.html
+       http://forums.oracle.com/forums/thread.jspa?messageID=3284213
+       http://www.coyotesong.com/docs/spring_db_tomcat.html
+       -->
+  <bean id="dataSource"
+    class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <property name="driverClassName"
+      value="${db.driver}" />
+    <property name="url"
+      value="${db.url}" />
+    <property name="username"
+      value="${db.username}"  />
+    <property name="password"
+      value="${db.password}" />
+	<property name="maxActive" value="5"/>
+	<property name="maxIdle" value="3"/>
+	<property name="minIdle" value="1"/>
+	<property name="poolPreparedStatements" value="true"/>
+	<property name="initialSize" value="1"/>
+  </bean>
+ 
+<bean id="surveyDao" class="edu.ku.it.si.lovekusurvey.dao.SurveyDaoSpringJDBC">
+
+	<property name="dataSource" ref="dataSource" />
+
+</bean>
+
+
+
+
+</beans>
+
+
