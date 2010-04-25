@@ -1,5 +1,7 @@
 package org.apache.struts.edit.model;
 
+import java.util.Arrays;
+
 
 /**
  * Models a Person who registers.
@@ -12,6 +14,9 @@ public class Person
     private String lastName;
     private String sport;
     private String gender;
+    private String residency;
+    private boolean over21;
+    private String [] carModels;
  
 
     public String getFirstName()
@@ -53,12 +58,39 @@ public class Person
 		return sport;
 	}
 
+	public void setResidency(String residency) {
+		this.residency = residency;
+	}
+
+	public String getResidency() {
+		return residency;
+	}
+
+	public void setOver21(boolean over21) {
+		this.over21 = over21;
+	}
+
+	public boolean isOver21() {
+		return over21;
+	}
+
+	public void setCarModels(String [] carModels) {
+		this.carModels = carModels;
+	}
+
+	public String [] getCarModels() {
+		return carModels;
+	}
+
 	public String toString()
     {
         return "First Name: " + getFirstName() + " | " +
         " Last Name:  " + getLastName() + " | " +
         " Favorite Sport: " + getSport() + " | " +
-        " Gender: " + getGender() ;
+        " Gender: " + getGender() + " | " +  
+        " Residency: " + getResidency() + " | " +
+        " Over 21: " + isOver21()  + " | " +
+        " Car models: " + Arrays.asList( getCarModels() ) ;
         
     }
 }

@@ -1,9 +1,11 @@
 package org.apache.struts.edit.action;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.struts.edit.model.Person;
+import org.apache.struts.edit.model.State;
 import org.apache.struts.edit.service.EditService;
 import org.apache.struts.edit.service.EditServiceInMemory;
 
@@ -26,7 +28,10 @@ public class EditAction extends ActionSupport {
 	private String [] sports = {"football", "baseball", "basketball" };
 	
 	private String [] genders = {"male", "female", "not sure" };
+	
+	private List<State> states ;
 
+	private String [] carModelsAvailable = {"Ford","Chrysler","Toyota","Nissan"};
 
 	public String execute() throws Exception {
 		
@@ -66,6 +71,26 @@ public class EditAction extends ActionSupport {
 		
 		return Arrays.asList(genders);
 		
+	}
+
+
+
+	public List<State> getStates() {
+		
+		states = new ArrayList<State>();
+		states.add( new State("AZ", "Arizona") );
+		states.add( new State("CA", "California") );
+		states.add( new State("FL", "Florida") );
+		states.add( new State("KS", "Kansas") );
+		states.add( new State("NY", "New York") );
+		
+		return states;
+	}
+
+
+
+	public String [] getCarModelsAvailable() {
+		return carModelsAvailable;
 	}
 
 }
