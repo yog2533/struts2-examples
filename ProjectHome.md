@@ -1,0 +1,1 @@
+NOTE:  The code examples are now at http://svn.apache.org/repos/asf/struts/sandbox/trunk/struts2examples/
